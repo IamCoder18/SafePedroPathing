@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.pedropathing.ftc"
+    namespace = "com.aaravlabs.safepedropathing.ftc"
     compileSdk = 30
 
     compileOptions {
@@ -28,6 +28,7 @@ android {
 dependencies {
     compileOnly(libs.bundles.ftc)
     api(project(":core"))
+    implementation(libs.synapse)
     dokkaPlugin(libs.dokka.java.plugin)
 }
 
@@ -39,11 +40,11 @@ val dokkaJar = tasks.register<Jar>("dokkaJar") {
 
 deployer {
     projectInfo {
-        name = "Pedro Pathing FTC"
-        description = "A path follower designed to revolutionize autonomous pathing in robotics"
-        url = "https://github.com/Pedro-Pathing/PedroPathing"
+        name = "Safe Pedro Pathing FTC"
+        description = "A Synapse-safe fork of Pedro Pathing designed to work with the Synapse pub/sub library for FTC robot code."
+        url = "https://github.com/IamCoder18/SafePedroPathing"
         scm {
-            fromGithub("Pedro-Pathing", "PedroPathing")
+            fromGithub("IamCoder18", "SafePedroPathing")
         }
         license("BSD 3-Clause License", "https://opensource.org/licenses/BSD-3-Clause")
 
@@ -81,4 +82,13 @@ deployer {
     }
 
     localSpec()
+
+    githubSpec {
+        owner.set(findProperty("githubUser") as String? ?: "IamCoder18")
+        repository.set("SafePedroPathing")
+        auth {
+            user.set(secret(findProperty("githubUser") as String? ?: "githubUser"))
+            token.set(secret(findProperty("githubToken") as String? ?: "githubToken"))
+        }
+    }
 }

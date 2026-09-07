@@ -1,9 +1,11 @@
 [versions]
 ftc = "11.1.0"
+synapse = "0.3.1"
 
 [libraries]
 ftc-robot-core = { group = "org.firstinspires.ftc", name = "RobotCore", version.ref = "ftc" }
 ftc-hardware = { group = "org.firstinspires.ftc", name = "Hardware", version.ref = "ftc" }
+synapse = { group = "com.aaravlabs", name = "synapse", version.ref = "synapse" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "23.0.0" }
 dokka-java-plugin = "org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0"
 
