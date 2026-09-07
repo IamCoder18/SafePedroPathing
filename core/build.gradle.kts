@@ -2,6 +2,7 @@ plugins {
     id("java-library")
     id("io.deepmedia.tools.deployer")
     id("org.jetbrains.dokka")
+    `maven-publish`
 }
 
 dependencies {
@@ -18,6 +19,52 @@ val dokkaJar = tasks.register<Jar>("dokkaJar") {
     dependsOn(tasks.named("dokkaGenerate"))
     from(dokka.basePublicationsDirectory.dir("html"))
     archiveClassifier = "html-docs"
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("github") {
+            from(components["java"])
+            pom {
+                name.set("Safe Pedro Pathing Core")
+                description.set("A Synapse-safe fork of Pedro Pathing designed to work with the Synapse pub/sub library for FTC robot code.")
+                url.set("https://github.com/IamCoder18/SafePedroPathing")
+                licenses {
+                    license {
+                        name.set("BSD 3-Clause License")
+                        url.set("https://opensource.org/licenses/BSD-3-Clause")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/IamCoder18/SafePedroPathing.git")
+                    developerConnection.set("scm:git:ssh://git@github.com:IamCoder18/SafePedroPathing.git")
+                    url.set("https://github.com/IamCoder18/SafePedroPathing")
+                }
+                developers {
+                    developer {
+                        id.set("IamCoder18")
+                        name.set("IamCoder18")
+                    }
+                    developer {
+                        id.set("Baron Henderson")
+                    }
+                    developer {
+                        id.set("Havish Sripada")
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/IamCoder18/SafePedroPathing")
+            credentials {
+                username = (project.findProperty("gpr.user") as String?) ?: System.getenv("GITHUB_USER") ?: System.getenv("GITHUB_ACTOR")
+                password = (project.findProperty("gpr.key") as String?) ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
 
 deployer {
@@ -66,13 +113,4 @@ deployer {
     }
 
     localSpec()
-
-    githubSpec {
-        owner.set(findProperty("githubUser") as String? ?: "IamCoder18")
-        repository.set("SafePedroPathing")
-        auth {
-            user.set(secret(findProperty("githubUser") as String? ?: "githubUser"))
-            token.set(secret(findProperty("githubToken") as String? ?: "githubToken"))
-        }
-    }
 }

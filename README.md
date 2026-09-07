@@ -1,6 +1,5 @@
 # Safe Pedro Pathing
 
-[![Release](https://jitpack.io/v/IamCoder18/SafePedroPathing.svg)](https://jitpack.io/#IamCoder18/SafePedroPathing)
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 A Synapse-safe fork of [Pedro Pathing](https://github.com/Pedro-Pathing/PedroPathing) designed to work with [Synapse](https://github.com/IamCoder18/synapse), the FTC pub/sub library with built-in hardware-thread safety.
@@ -9,29 +8,7 @@ Pedro Pathing is a path follower that revolutionizes autonomous pathing in robot
 
 ## Installation
 
-### JitPack (preferred)
-
-Add JitPack as a repository and pull the latest release:
-
-```gradle
-repositories {
-    mavenCentral()
-    google()
-    maven { url = uri("https://jitpack.io") }
-}
-
-dependencies {
-    implementation 'com.github.IamCoder18:SafePedroPathing:ftc:<release-tag>'
-}
-```
-
-Replace `<release-tag>` with the latest GitHub release tag (e.g. `v3.0.0`). The `ftc` artifact is the Android library; pull `core` as well only if you need the headless path-follower math outside the FTC SDK.
-
-Browse builds and tags at https://jitpack.io/#IamCoder18/SafePedroPathing.
-
-### GitHub Packages (fallback)
-
-The library is also published to GitHub Packages at `https://maven.pkg.github.com/IamCoder18/SafePedroPathing`. GitHub Packages requires authentication even for public packages, so configure credentials first:
+The library is published to **GitHub Packages** at `https://maven.pkg.github.com/IamCoder18/SafePedroPathing`. GitHub Packages requires authentication even for public packages, so configure credentials first.
 
 `~/.gradle/gradle.properties`:
 ```properties
@@ -39,7 +16,7 @@ githubUser=<your-github-username>
 githubToken=<token-with-read:packages>
 ```
 
-Then in your FTC project:
+Then in your FTC project (`build.dependencies.gradle`):
 ```gradle
 repositories {
     maven {
@@ -52,9 +29,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.aaravlabs.safepedropathing:ftc:<version>'
+    implementation 'com.aaravlabs.safepedropathing:ftc:3.0.0'
 }
 ```
+
+> JitPack is not supported because the Synapse dependency itself is hosted on GitHub Packages and JitPack's build environment cannot authenticate to it. Stick with GitHub Packages.
 
 ## What's different from upstream Pedro Pathing
 
