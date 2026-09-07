@@ -47,4 +47,4 @@ jobs:
           java-version: '17'
 
       - name: Publish
-        run: ./gradlew --no-daemon deployGithubPackages
+        run: ./gradlew --no-daemon -Pversion=${GITHUB_REF#refs/tags/v} deployGithubPackages
