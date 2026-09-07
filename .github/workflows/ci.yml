@@ -7,6 +7,10 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  GITHUB_USER: ${{ github.actor }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   test:
     name: Build & Test
@@ -44,6 +48,3 @@ jobs:
 
       - name: Publish
         run: ./gradlew --no-daemon deployGithubPackages
-        env:
-          GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
