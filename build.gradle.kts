@@ -33,5 +33,8 @@ tasks.register("deployLocal") {
 tasks.register("deployGithubPackages") {
     group = "publishing"
     description = "Publishes all subprojects to GitHub Packages."
-    dependsOn(subprojects.map { it.tasks.named("publishGithubPublicationToGitHubPackagesRepository") })
+    dependsOn(
+        "core:publishGithubPublicationToGitHubPackagesRepository",
+        "ftc:publishGithubReleasePublicationToGitHubPackagesRepository"
+    )
 }
