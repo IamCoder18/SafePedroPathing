@@ -7,7 +7,7 @@ plugins {
 }
 
 subprojects {
-    group = "com.pedropathing"
+    group = "com.aaravlabs.safepedropathing"
     version = property("version") as String
 }
 

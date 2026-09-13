@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.pedropathing.revhub"
+    namespace = "com.aaravlabs.safepedropathing.revhub"
     compileSdk = 35
 
     defaultConfig {
@@ -28,6 +28,7 @@ android {
 dependencies {
     compileOnly(libs.bundles.ftc)
     api(project(":core"))
+    implementation(libs.synapse)
     dokkaPlugin(libs.dokka.java.plugin)
 }
 
