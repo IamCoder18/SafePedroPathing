@@ -15,5 +15,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PedroPathing"
+rootProject.name = "SafePedroPathing"
 include(":core", ":revhub")
