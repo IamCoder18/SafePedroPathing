@@ -30,3 +30,12 @@ tasks.register("deployLocal") {
     description = "Publishes all subprojects to Maven Local."
     dependsOn(subprojects.map { it.tasks.named("deployLocal") })
 }
+
+tasks.register("deployGithubPackages") {
+    group = "publishing"
+    description = "Publishes all subprojects to GitHub Packages."
+    dependsOn(
+        "core:publishGithubPublicationToGitHubPackagesRepository",
+        "revhub:publishGithubReleasePublicationToGitHubPackagesRepository"
+    )
+}

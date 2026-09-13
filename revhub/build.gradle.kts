@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.dokka")
     id("io.deepmedia.tools.deployer")
     kotlin("android")
+    `maven-publish`
 }
 
 android {
@@ -39,13 +40,64 @@ val dokkaJar = tasks.register<Jar>("dokkaJar") {
     archiveClassifier = "html-docs"
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("githubRelease") {
+            pom {
+                name.set("Safe Pedro Pathing RevHub")
+                description.set("A Synapse-safe fork of Pedro Pathing designed to work with the Synapse pub/sub library for FTC robot code.")
+                url.set("https://github.com/IamCoder18/SafePedroPathing")
+                licenses {
+                    license {
+                        name.set("BSD 3-Clause License")
+                        url.set("https://opensource.org/licenses/BSD-3-Clause")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/IamCoder18/SafePedroPathing.git")
+                    developerConnection.set("scm:git:ssh://git@github.com:IamCoder18/SafePedroPathing.git")
+                    url.set("https://github.com/IamCoder18/SafePedroPathing")
+                }
+                developers {
+                    developer {
+                        id.set("IamCoder18")
+                        name.set("IamCoder18")
+                    }
+                    developer {
+                        id.set("Baron Henderson")
+                    }
+                    developer {
+                        id.set("Havish Sripada")
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/IamCoder18/SafePedroPathing")
+            credentials {
+                username = (project.findProperty("gpr.user") as String?) ?: System.getenv("GITHUB_USER") ?: System.getenv("GITHUB_ACTOR")
+                password = (project.findProperty("gpr.key") as String?) ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    publishing.publications.named<MavenPublication>("githubRelease") {
+        from(components["release"])
+    }
+}
+
 deployer {
     projectInfo {
-        name = "Pedro Pathing FTC"
-        description = "A path follower designed to revolutionize autonomous pathing in robotics"
-        url = "https://pedropathing.com"
+        name = "Safe Pedro Pathing RevHub"
+        description = "A Synapse-safe fork of Pedro Pathing designed to work with the Synapse pub/sub library for FTC robot code."
+        url = "https://github.com/IamCoder18/SafePedroPathing"
         scm {
-            fromGithub("Pedro-Pathing", "PedroPathing")
+            fromGithub("IamCoder18", "SafePedroPathing")
         }
         license("BSD 3-Clause License", "https://opensource.org/licenses/BSD-3-Clause")
 
