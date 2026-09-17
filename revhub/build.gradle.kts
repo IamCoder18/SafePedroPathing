@@ -123,7 +123,7 @@ deployer {
                 user = secret("SONATYPE_USERNAME")
                 password = secret("SONATYPE_PASSWORD")
             }
-            allowMavenCentralSync = false
+            allowMavenCentralSync = true
         }
 
         nexusSpec("snapshot") {
