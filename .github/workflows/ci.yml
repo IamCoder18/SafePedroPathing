@@ -47,3 +47,16 @@ jobs:
 
       - name: Publish
         run: ./gradlew --no-daemon -Pversion=${GITHUB_REF#refs/tags/v} deployGithubPackages
+
+      - name: Publish to Maven Central
+        # Publishes via the Central Portal publisher API. Requires the
+        # com.aaravlabs.safepedropathing namespace to be claimed on the
+        # Central Portal and the GPG public key to be on keys.openpgp.org,
+        # keyserver.ubuntu.com, or pgp.mit.edu.
+        env:
+          PUBLISH_PEDRO: 'yes please'
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MVN_GPG_KEY: ${{ secrets.MVN_GPG_KEY }}
+          MVN_GPG_PASSWORD: ${{ secrets.MVN_GPG_PASSWORD }}
+        run: ./gradlew --no-daemon -Pversion=${GITHUB_REF#refs/tags/v} deployCentralPortal
