@@ -4,8 +4,6 @@
  */
 package com.aaravlabs.safepedropathing.api;
 
-package com.aaravlabs.safepedropathing.api;
-
 import com.aaravlabs.safepedropathing.math.Pose;
 import com.aaravlabs.safepedropathing.utils.Angle;
 import java.util.function.DoubleUnaryOperator;
