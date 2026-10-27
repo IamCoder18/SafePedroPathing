@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run gradle build
+        run: ./gradlew --no-daemon assemble
+
+  publish:
+    name: Publish to GitHub Packages
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+      packages: write
+    env:
+      GITHUB_USER: ${{ github.actor }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Publish
+        run: ./gradlew --no-daemon -Pversion=${GITHUB_REF#refs/tags/v} deployGithubPackages
+
+      - name: Publish to Maven Central
+        # Publishes via the Central Portal publisher API. Requires the
+        # com.aaravlabs.safepedropathing namespace to be claimed on the
+        # Central Portal and the GPG public key to be on keys.openpgp.org,
+        # keyserver.ubuntu.com, or pgp.mit.edu.
+        env:
+          PUBLISH_PEDRO: 'yes please'
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MVN_GPG_KEY: ${{ secrets.MVN_GPG_KEY }}
+          MVN_GPG_PASSWORD: ${{ secrets.MVN_GPG_PASSWORD }}
+        run: ./gradlew --no-daemon -Pversion=${GITHUB_REF#refs/tags/v} deployCentralPortal

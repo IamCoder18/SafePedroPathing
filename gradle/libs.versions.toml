@@ -1,5 +1,6 @@
 [versions]
 ftc = "12.0.0"
+synapse = "0.4.0"
 dokka = "2.2.0"
 agp = "8.7.3"
 kotlin = "2.3.21"
@@ -9,6 +10,7 @@ spotless = "8.4.0"
 [libraries]
 ftc-robot-core = { group = "org.firstinspires.ftc", name = "RobotCore", version.ref = "ftc" }
 ftc-hardware = { group = "org.firstinspires.ftc", name = "Hardware", version.ref = "ftc" }
+synapse = { group = "com.aaravlabs", name = "synapse", version.ref = "synapse" }
 dokka-java-plugin = { group = "org.jetbrains.dokka", name = "kotlin-as-java-plugin", version.ref = "dokka" }
 
 [bundles]

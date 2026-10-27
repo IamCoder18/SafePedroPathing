@@ -7,7 +7,7 @@ plugins {
 }
 
 subprojects {
-    group = "com.pedropathing"
+    group = "com.aaravlabs.safepedropathing"
     version = property("version") as String
 }
 
@@ -29,4 +29,13 @@ tasks.register("deployLocal") {
     group = "publishing"
     description = "Publishes all subprojects to Maven Local."
     dependsOn(subprojects.map { it.tasks.named("deployLocal") })
+}
+
+tasks.register("deployGithubPackages") {
+    group = "publishing"
+    description = "Publishes all subprojects to GitHub Packages."
+    dependsOn(
+        "core:publishGithubPublicationToGitHubPackagesRepository",
+        "revhub:publishGithubReleasePublicationToGitHubPackagesRepository"
+    )
 }
