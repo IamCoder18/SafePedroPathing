@@ -6,12 +6,13 @@ package com.aaravlabs.safepedropathing.follower;
 
 import static com.aaravlabs.safepedropathing.utils.Angle.normalizeSigned;
 
+import com.aaravlabs.safepedropathing.algorithm.ForesightConfig;
 import com.aaravlabs.safepedropathing.controllers.Controller;
 import com.aaravlabs.safepedropathing.controllers.PIDController;
 import com.aaravlabs.safepedropathing.drivetrain.DrivePowers;
 import com.aaravlabs.safepedropathing.math.Vector2D;
 import com.aaravlabs.safepedropathing.utils.Angle;
-import com.aaravlabs.safepedropathing.utils.Utils;
+import com.aaravlabs.safepedropathing.utils.Control;
 
 public class ManualDrive {
     private static final double AUTO_HOLD_INPUT_THRESHOLD = 0.1;
@@ -70,8 +71,9 @@ public class ManualDrive {
                 headingLinear * angularVel + headingQuadratic * angularVel * angularVel * Math.signum(angularVel);
         double headingError =
                 Angle.normalizeSigned(targetHeading - follower.pose().heading());
-        double error = headingError - brakeDist;
-        double power = Utils.clamp(headingFeedback.calculate(0, error), -0.3, 1.0) * strength;
+        double error = Angle.normalizeSigned(headingError - brakeDist);
+        double power = headingFeedback.calculate(0, error) * strength;
+        power = Control.clampBrakingPower(power, angularVel, 0.3);
         return new DrivePowers(powers.forward(), powers.strafe(), power);
     }
 
@@ -83,6 +85,30 @@ public class ManualDrive {
             double headingLinear,
             double headingQuadratic) {
         return headingLock(follower, headingFeedback, powers, targetHeading, headingLinear, headingQuadratic, 0.5);
+    }
+
+    public static DrivePowers headingLock(
+            ForesightConfig config, Follower follower, DrivePowers powers, double targetHeading, double strength) {
+        return headingLock(
+                follower,
+                config.headingFeedback.get(),
+                powers,
+                targetHeading,
+                config.headingBrakeCoefficients.get().x(),
+                config.headingBrakeCoefficients.get().y(),
+                strength);
+    }
+
+    public static DrivePowers headingLock(
+            ForesightConfig config, Follower follower, DrivePowers powers, double targetHeading) {
+        return headingLock(
+                follower,
+                config.headingFeedback.get(),
+                powers,
+                targetHeading,
+                config.headingBrakeCoefficients.get().x(),
+                config.headingBrakeCoefficients.get().y(),
+                0.5);
     }
 
     /** Drives manually or holds pose when input stops and standing still. */
